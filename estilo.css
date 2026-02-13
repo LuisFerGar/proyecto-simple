@@ -126,4 +126,34 @@ header h1 {
     header h1 {
         font-size: 1.8rem;
     }
+    /* PUSH 10: Toques finales y Footer */
+
+/* Aplicamos la fuente de cine a los títulos */
+header h1, .info h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 2px;
+}
+
+footer {
+    text-align: center;
+    padding: 40px 20px;
+    margin-top: 50px;
+    background-color: #000;
+    color: #555;
+    border-top: 2px solid #e50914;
+}
+
+footer strong {
+    color: #e50914;
+}
+
+/* Efecto suave al cargar la página */
+body {
+    animation: fadeIn 1s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
 }
