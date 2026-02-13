@@ -1,53 +1,129 @@
+/* =========================================
+   ESTILOS GENERALES (CINE DARK MODE)
+   ========================================= */
 body {
-    background-color: #121212; 
+    background-color: #121212; /* Fondo oscuro tipo Netflix */
     color: #e0e0e0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     margin: 0;
     padding: 20px;
     line-height: 1.6;
 }
 
 header {
-    background-color: #e50914; 
-    padding: 1rem;
+    background-color: #e50914; /* Rojo vibrante de cine */
+    padding: 2rem;
     text-align: center;
-    border-radius: 10px;
-    margin-bottom: 40px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    border-radius: 12px;
+    margin-bottom: 50px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
 header h1 {
     margin: 0;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
+    font-size: 2.5rem;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 }
 
+/* =========================================
+   CONTENEDOR DE LA CARTELERA
+   ========================================= */
 .contenedor-cartelera {
     max-width: 900px;
     margin: 0 auto;
+    padding-bottom: 50px;
 }
 
+/* =========================================
+   TARJETA DE PELÍCULA (FLEXBOX)
+   ========================================= */
 .pelicula-card {
+    display: flex;             /* Pone portada a la izquierda, info a la derecha */
+    align-items: stretch;      /* Hace que la imagen y el texto tengan el mismo alto */
     background-color: #1f1f1f;
-    margin-bottom: 25px;
-    border-bottom: 4px solid #e50914; 
-    padding: 15px;
+    margin-bottom: 30px;
+    border-radius: 15px;
+    overflow: hidden;          /* Para que la imagen respete los bordes redondeados */
+    box-shadow: 0 8px 15px rgba(0,0,0,0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #333;
 }
 
+/* Efecto al pasar el mouse */
+.pelicula-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(229, 9, 20, 0.2);
+    border-color: #e50914;
+}
+
+/* Imagen de la Portada */
 .portada {
-    max-width: 100%; 
-    border-radius: 4px;
-    display: block;
-    margin-bottom: 15px;
+    width: 200px;              /* Ancho fijo para la izquierda */
+    min-width: 200px;
+    height: auto;
+    object-fit: cover;         /* Recorta la imagen sin deformarla */
+    border-right: 3px solid #e50914;
+}
+
+/* Sección de información */
+.info {
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;   /* Centra el texto verticalmente */
+    flex: 1;
 }
 
 .info h2 {
     color: #ffffff;
-    font-size: 1.5rem;
-    margin-top: 0;
+    font-size: 1.8rem;
+    margin: 0 0 10px 0;
+}
+
+.genero {
+    color: #e50914;
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.descripcion {
+    font-size: 1rem;
+    color: #bdc3c7;
+    margin-bottom: 15px;
 }
 
 .puntuacion {
-    color: #f1c40f;
+    color: #f1c40f; /* Color dorado para las estrellas */
     font-weight: bold;
+    font-size: 1.1rem;
+}
+
+/* =========================================
+   DISEÑO PARA CELULARES (RESPONSIVE)
+   ========================================= */
+@media (max-width: 650px) {
+    .pelicula-card {
+        flex-direction: column; /* Se apilan: imagen arriba, texto abajo */
+    }
+
+    .portada {
+        width: 100%;
+        height: 300px;
+        border-right: none;
+        border-bottom: 4px solid #e50914;
+    }
+
+    .info {
+        text-align: center;
+        padding: 20px;
+    }
+
+    header h1 {
+        font-size: 1.8rem;
+    }
 }
