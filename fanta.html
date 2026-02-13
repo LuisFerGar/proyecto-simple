@@ -1,108 +1,456 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Reseña de Refrescos Fanta</title>
-</head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Reseñas de Fanta por color</title>
+  <style>
+    :root{
+      --bg:#0b0f19;
+      --card:#121a2a;
+      --text:#e9eefc;
+      --muted:#a9b4d0;
+      --border:rgba(255,255,255,.08);
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", sans-serif;
+      background: radial-gradient(1200px 600px at 20% -10%, rgba(255,153,0,.22), transparent 60%),
+                  radial-gradient(900px 500px at 90% 0%, rgba(0,200,255,.15), transparent 55%),
+                  radial-gradient(900px 500px at 50% 110%, rgba(160,90,255,.14), transparent 60%),
+                  var(--bg);
+      color:var(--text);
+      line-height:1.5;
+    }
+    header{
+      padding:56px 18px 24px;
+      max-width:1100px;
+      margin:0 auto;
+    }
+    .badge{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding:8px 12px;
+      border:1px solid var(--border);
+      border-radius:999px;
+      color:var(--muted);
+      background:rgba(255,255,255,.03);
+      backdrop-filter: blur(8px);
+    }
+    h1{
+      margin:14px 0 8px;
+      font-size: clamp(28px, 4vw, 44px);
+      letter-spacing:-.02em;
+    }
+    .subtitle{
+      margin:0;
+      max-width:70ch;
+      color:var(--muted);
+      font-size: clamp(14px, 1.6vw, 16px);
+    }
 
+    main{
+      max-width:1100px;
+      margin:0 auto;
+      padding: 10px 18px 60px;
+      display:grid;
+      gap:16px;
+    }
+
+    .toolbar{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      padding:14px;
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      background:rgba(255,255,255,.03);
+      box-shadow: var(--shadow);
+    }
+    .search{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex:1 1 320px;
+      min-width:260px;
+    }
+    .search input{
+      width:100%;
+      padding:12px 12px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:rgba(18,26,42,.6);
+      color:var(--text);
+      outline:none;
+    }
+    .search input::placeholder{color:rgba(169,180,208,.75)}
+    .chips{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:flex-end;
+      flex:1 1 320px;
+    }
+    .chip{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      color:var(--muted);
+      padding:10px 12px;
+      border-radius:999px;
+      cursor:pointer;
+      user-select:none;
+      transition:.15s transform ease, .15s background ease, .15s color ease, .15s border-color ease;
+    }
+    .chip:hover{transform: translateY(-1px); background:rgba(255,255,255,.06); color:var(--text)}
+    .chip.active{
+      color:var(--text);
+      border-color:rgba(255,255,255,.22);
+      background:rgba(255,255,255,.08);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:16px;
+    }
+    .card{
+      grid-column: span 6;
+      border:1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+      min-height: 210px;
+    }
+    @media (max-width: 860px){
+      .card{grid-column: span 12;}
+    }
+
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background: radial-gradient(500px 250px at 10% 10%, var(--accent), transparent 60%),
+                  radial-gradient(400px 200px at 90% 30%, rgba(255,255,255,.10), transparent 60%);
+      opacity:.55;
+      pointer-events:none;
+    }
+    .card-inner{
+      position:relative;
+      padding:18px 18px 16px;
+      display:grid;
+      gap:10px;
+    }
+    .top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .title{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      min-width:0;
+    }
+    .swatch{
+      width:14px;
+      height:14px;
+      border-radius: 4px;
+      background: var(--accent);
+      box-shadow: 0 0 0 3px rgba(255,255,255,.06);
+      flex:0 0 auto;
+    }
+    .title h2{
+      margin:0;
+      font-size:18px;
+      letter-spacing:-.01em;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .meta{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      color:var(--muted);
+      font-size:13px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      text-align:right;
+    }
+    .pill{
+      border:1px solid var(--border);
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(0,0,0,.18);
+      color:var(--muted);
+    }
+    .rating{
+      display:flex;
+      align-items:center;
+      gap:6px;
+      font-weight:700;
+      color:var(--text);
+    }
+    .stars{
+      letter-spacing:1px;
+      font-size:14px;
+    }
+
+    .desc{
+      margin:0;
+      color:rgba(233,238,252,.92);
+      max-width: 75ch;
+    }
+
+    .notes{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:4px;
+    }
+    .note{
+      font-size:12px;
+      color:var(--muted);
+      border:1px dashed rgba(255,255,255,.12);
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(18,26,42,.5);
+    }
+
+    footer{
+      max-width:1100px;
+      margin:0 auto;
+      padding: 0 18px 40px;
+      color:var(--muted);
+      font-size:13px;
+    }
+    footer a{color:var(--text); text-decoration:none; border-bottom:1px dotted rgba(255,255,255,.35)}
+    .hidden{display:none !important;}
+  </style>
+</head>
 <body>
 
 <header>
-  <h1>Reseña de los refrescos Fanta por colores</h1>
-  <p>
-    En esta página presentamos una reseña de los principales sabores de Fanta,
-    describiendo su sabor, popularidad y cuándo se suelen consumir.
+  <div class="badge">🥤 <span>Guía rápida</span> • <span>Reseñas por color</span> • <span>Estilo “revista”</span></div>
+  <h1>Reseña de los refrescos Fanta por color</h1>
+  <p class="subtitle">
+    Una página sencilla para comparar sabores “por color”. Puedes editar nombres, notas y puntajes según lo que vendas o encuentres en tu ciudad.
   </p>
 </header>
 
-<hr>
+<main>
+  <section class="toolbar" aria-label="Herramientas">
+    <div class="search">
+      <label for="q" style="display:none;">Buscar</label>
+      <input id="q" type="search" placeholder="Buscar por color o sabor… (ej: naranja, uva, piña)" />
+    </div>
 
-<section>
-  <h2>🍊 Fanta Naranja</h2>
-  <p>
-    Es el sabor clásico de Fanta y el más conocido en todo el mundo.
-    Tiene un sabor dulce y cítrico que combina muy bien con comidas rápidas.
-  </p>
-  <ul>
-    <li>Sabor: Naranja dulce</li>
-    <li>Popularidad: Muy alta</li>
-    <li>Ideal para: Acompañar comidas</li>
-  </ul>
-</section>
+    <div class="chips" role="group" aria-label="Filtros por color">
+      <button class="chip active" data-filter="all" type="button">Todos</button>
+      <button class="chip" data-filter="orange" type="button">Naranja</button>
+      <button class="chip" data-filter="purple" type="button">Uva</button>
+      <button class="chip" data-filter="yellow" type="button">Piña</button>
+      <button class="chip" data-filter="red" type="button">Fresa</button>
+      <button class="chip" data-filter="green" type="button">Manzana</button>
+      <button class="chip" data-filter="blue" type="button">Azul</button>
+    </div>
+  </section>
 
-<hr>
+  <section class="grid" id="cards" aria-label="Reseñas">
+    <!-- NARANJA -->
+    <article class="card" data-color="orange" style="--accent: rgba(255, 153, 0, 0.9);">
+      <div class="card-inner">
+        <div class="top">
+          <div class="title">
+            <span class="swatch" aria-hidden="true"></span>
+            <h2>Fanta Naranja</h2>
+          </div>
+          <div class="meta">
+            <span class="pill">Cítrica</span>
+            <span class="rating"><span class="stars" aria-label="4 de 5">★★★★☆</span> <span>4.0</span></span>
+          </div>
+        </div>
+        <p class="desc">
+          El clásico: dulce y con un toque cítrico. Ideal bien fría. Si te gusta el sabor “naranja caramelizada”, esta suele ser la más segura.
+        </p>
+        <div class="notes">
+          <span class="note">Mejor con hielo</span>
+          <span class="note">Dulzor alto</span>
+          <span class="note">Para combos</span>
+        </div>
+      </div>
+    </article>
 
-<section>
-  <h2>🍇 Fanta Uva</h2>
-  <p>
-    Este sabor tiene un gusto fuerte a uva y es bastante dulce.
-    Es preferido por personas que disfrutan sabores intensos.
-  </p>
-  <ul>
-    <li>Sabor: Uva dulce</li>
-    <li>Popularidad: Alta</li>
-    <li>Ideal para: Tomar bien fría</li>
-  </ul>
-</section>
+    <!-- UVA / MORADA -->
+    <article class="card" data-color="purple" style="--accent: rgba(162, 94, 255, 0.95);">
+      <div class="card-inner">
+        <div class="top">
+          <div class="title">
+            <span class="swatch" aria-hidden="true"></span>
+            <h2>Fanta Uva (Morada)</h2>
+          </div>
+          <div class="meta">
+            <span class="pill">Frutal</span>
+            <span class="rating"><span class="stars" aria-label="4 de 5">★★★★☆</span> <span>4.1</span></span>
+          </div>
+        </div>
+        <p class="desc">
+          Sabor intenso y “jugoso”. A muchos les encanta por lo diferente; a otros les parece demasiado dulce. Buena para quien busca algo fuerte.
+        </p>
+        <div class="notes">
+          <span class="note">Sabor potente</span>
+          <span class="note">Aroma marcado</span>
+          <span class="note">Fan-favorite</span>
+        </div>
+      </div>
+    </article>
 
-<hr>
+    <!-- PIÑA / AMARILLA -->
+    <article class="card" data-color="yellow" style="--accent: rgba(255, 214, 10, 0.95);">
+      <div class="card-inner">
+        <div class="top">
+          <div class="title">
+            <span class="swatch" aria-hidden="true"></span>
+            <h2>Fanta Piña (Amarilla)</h2>
+          </div>
+          <div class="meta">
+            <span class="pill">Tropical</span>
+            <span class="rating"><span class="stars" aria-label="4 de 5">★★★★☆</span> <span>3.9</span></span>
+          </div>
+        </div>
+        <p class="desc">
+          Dulce tropical con sensación refrescante. Perfecta para días de calor. Si la quieres menos empalagosa, sirve con bastante hielo.
+        </p>
+        <div class="notes">
+          <span class="note">Tropical</span>
+          <span class="note">Refrescante</span>
+          <span class="note">Con hielo mejora</span>
+        </div>
+      </div>
+    </article>
 
-<section>
-  <h2>🍍 Fanta Piña</h2>
-  <p>
-    La Fanta de piña ofrece un sabor tropical y refrescante.
-    Es muy popular en climas cálidos.
-  </p>
-  <ul>
-    <li>Sabor: Piña tropical</li>
-    <li>Popularidad: Media</li>
-    <li>Ideal para: Días calurosos</li>
-  </ul>
-</section>
+    <!-- FRESA / ROJA -->
+    <article class="card" data-color="red" style="--accent: rgba(255, 62, 91, 0.95);">
+      <div class="card-inner">
+        <div class="top">
+          <div class="title">
+            <span class="swatch" aria-hidden="true"></span>
+            <h2>Fanta Fresa (Roja)</h2>
+          </div>
+          <div class="meta">
+            <span class="pill">Dulce</span>
+            <span class="rating"><span class="stars" aria-label="3.5 de 5">★★★☆☆</span> <span>3.5</span></span>
+          </div>
+        </div>
+        <p class="desc">
+          Sabor a fresa tipo “caramelo”. Suele gustar a quien prefiere bebidas muy dulces. Si buscas algo menos fuerte, esta no es la primera opción.
+        </p>
+        <div class="notes">
+          <span class="note">Dulzor muy alto</span>
+          <span class="note">Sabor a caramelo</span>
+          <span class="note">Para golosos</span>
+        </div>
+      </div>
+    </article>
 
-<hr>
+    <!-- MANZANA / VERDE -->
+    <article class="card" data-color="green" style="--accent: rgba(54, 214, 123, 0.95);">
+      <div class="card-inner">
+        <div class="top">
+          <div class="title">
+            <span class="swatch" aria-hidden="true"></span>
+            <h2>Fanta Manzana (Verde)</h2>
+          </div>
+          <div class="meta">
+            <span class="pill">Ácida</span>
+            <span class="rating"><span class="stars" aria-label="4 de 5">★★★★☆</span> <span>4.0</span></span>
+          </div>
+        </div>
+        <p class="desc">
+          Tiene un toque ácido que equilibra el dulzor. Buena alternativa si ya te cansaste de la naranja. Se siente “más ligera” que otras.
+        </p>
+        <div class="notes">
+          <span class="note">Toque ácido</span>
+          <span class="note">Equilibrada</span>
+          <span class="note">Muy refrescante</span>
+        </div>
+      </div>
+    </article>
 
-<section>
-  <h2>🍓 Fanta Fresa</h2>
-  <p>
-    Tiene un sabor muy dulce similar a caramelos de fresa.
-    Es más común en algunas regiones.
-  </p>
-  <ul>
-    <li>Sabor: Fresa dulce</li>
-    <li>Popularidad: Media</li>
-    <li>Ideal para: Postres</li>
-  </ul>
-</section>
-
-<hr>
-
-<section>
-  <h2>🍏 Fanta Manzana</h2>
-  <p>
-    Presenta un toque ligeramente ácido que la hace diferente.
-    Es refrescante y menos empalagosa.
-  </p>
-  <ul>
-    <li>Sabor: Manzana semi-ácida</li>
-    <li>Popularidad: Variable según país</li>
-    <li>Ideal para: Refrescarse</li>
-  </ul>
-</section>
-
-<hr>
+    <!-- AZUL (GENÉRICA) -->
+    <article class="card" data-color="blue" style="--accent: rgba(0, 200, 255, 0.95);">
+      <div class="card-inner">
+        <div class="top">
+          <div class="title">
+            <span class="swatch" aria-hidden="true"></span>
+            <h2>Fanta Azul (Edición/Variante)</h2>
+          </div>
+          <div class="meta">
+            <span class="pill">Especial</span>
+            <span class="rating"><span class="stars" aria-label="3.8 de 5">★★★★☆</span> <span>3.8</span></span>
+          </div>
+        </div>
+        <p class="desc">
+          Algunas regiones tienen Fantas “azules” con sabores tipo berries o “misterio”. Normalmente es dulce y muy aromática. Perfecta para probar algo distinto.
+        </p>
+        <div class="notes">
+          <span class="note">Varía por país</span>
+          <span class="note">Aromática</span>
+          <span class="note">Edición especial</span>
+        </div>
+      </div>
+    </article>
+  </section>
+</main>
 
 <footer>
-  <h3>Conclusión</h3>
   <p>
-    Fanta ofrece una gran variedad de sabores para diferentes gustos.
-    Algunas personas prefieren los sabores clásicos como naranja,
-    mientras que otras disfrutan sabores frutales más intensos.
-  </p>
-  <p>
-    Página creada para proyecto educativo.
+    Nota: Los sabores y colores disponibles pueden cambiar según el país (y hay ediciones limitadas). Edita esta página con tus reseñas reales.
   </p>
 </footer>
+
+<script>
+  const q = document.getElementById('q');
+  const chips = Array.from(document.querySelectorAll('.chip'));
+  const cards = Array.from(document.querySelectorAll('.card'));
+
+  let activeFilter = 'all';
+
+  function applyFilters() {
+    const term = (q.value || '').trim().toLowerCase();
+
+    cards.forEach(card => {
+      const color = card.dataset.color;
+      const text = card.innerText.toLowerCase();
+
+      const matchFilter = (activeFilter === 'all') || (color === activeFilter);
+      const matchSearch = !term || text.includes(term);
+
+      card.classList.toggle('hidden', !(matchFilter && matchSearch));
+    });
+  }
+
+  chips.forEach(btn => {
+    btn.addEventListener('click', () => {
+      chips.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeFilter = btn.dataset.filter;
+      applyFilters();
+    });
+  });
+
+  q.addEventListener('input', applyFilters);
+</script>
 
 </body>
 </html>
