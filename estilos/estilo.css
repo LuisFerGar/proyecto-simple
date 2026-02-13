@@ -1,0 +1,114 @@
+/* =========================================
+   ESTILO GENERAL UNIFICADO (DARK MODE)
+   ========================================= */
+:root {
+    --fondo-principal: #121212;  /* Negro suave */
+    --fondo-tarjeta: #1e1e1e;    /* Gris oscuro */
+    --texto-principal: #e0e0e0;  /* Blanco hueso */
+    --texto-secundario: #a0a0a0; /* Gris claro */
+    --acento: #3b82f6;           /* Azul moderno (puedes cambiarlo a rojo o naranja) */
+    --borde: #333333;
+}
+
+body {
+    background-color: var(--fondo-principal);
+    color: var(--texto-principal);
+    font-family: system-ui, -apple-system, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+/* Encabezados y Navegación */
+header, nav {
+    background-color: var(--fondo-tarjeta);
+    padding: 20px;
+    text-align: center;
+    border-bottom: 1px solid var(--borde);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+h1, h2, h3 {
+    margin-top: 0;
+    color: #fff;
+}
+
+/* Contenedor Principal */
+.container, .contenedor-cartelera {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* Tarjetas (Sirve para el Index y para Películas) */
+.card, .pelicula-card {
+    background-color: var(--fondo-tarjeta);
+    border: 1px solid var(--borde);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    transition: transform 0.2s ease;
+    /* Flexbox para que sirva en la lista de peliculas */
+    display: flex;
+    flex-direction: column; 
+}
+
+/* Ajuste específico para cuando la tarjeta es horizontal (Lista de Películas) */
+.pelicula-card {
+    flex-direction: row; /* Imagen a la izq, texto a la der */
+}
+
+.card:hover, .pelicula-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--acento);
+}
+
+.card-body, .info {
+    padding: 20px;
+}
+
+/* Imágenes */
+.portada {
+    width: 150px;
+    height: auto;
+    object-fit: cover;
+}
+
+/* Botones */
+.btn {
+    display: inline-block;
+    background-color: var(--acento);
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+    margin-top: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 40px;
+    color: var(--texto-secundario);
+    font-size: 0.9rem;
+    border-top: 1px solid var(--borde);
+    margin-top: 40px;
+}
+
+/* Responsive para celulares */
+@media (max-width: 768px) {
+    .pelicula-card {
+        flex-direction: column;
+    }
+    .portada {
+        width: 100%;
+        height: 250px;
+    }
+}

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Reseñas de Fanta</title>
+  <link rel="stylesheet" href="../estilos/estilo.css">
+  
+  <style>
+    /* Estilos específicos SOLO para lo que necesita Fanta (Chips y Colores) */
+    .toolbar {
+        background-color: var(--fondo-tarjeta);
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        border: 1px solid var(--borde);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: space-between;
+    }
+    
+    .search input {
+        background: #121212;
+        border: 1px solid var(--borde);
+        color: white;
+        padding: 10px;
+        border-radius: 6px;
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .chip {
+        background: transparent;
+        border: 1px solid var(--borde);
+        color: var(--texto-secundario);
+        padding: 8px 15px;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .chip.active, .chip:hover {
+        background: var(--acento);
+        color: white;
+        border-color: var(--acento);
+    }
+
+    /* Grid layout para las tarjetas de Fanta */
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+    }
+
+    /* Ajuste para que las tarjetas de Fanta usen el estilo global pero con su borde de color */
+    .fanta-card {
+        border-top: 4px solid var(--accent-color); /* Borde superior de color */
+        position: relative;
+    }
+    
+    .swatch {
+        width: 15px; height: 15px; 
+        background: var(--accent-color);
+        display: inline-block;
+        border-radius: 3px;
+        margin-right: 5px;
+    }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🥤 Reseñas Fanta</h1>
+  <p style="color: var(--texto-secundario);">Compara sabores por color. Estilo consistente.</p>
+  <a href="../index.html" class="btn" style="background:#444; font-size: 0.8rem;">⬅ Volver al Inicio</a>
+</header>
+
+<main class="container">
+
+  <section class="grid" id="cards">
+    
+    <article class="card fanta-card" data-color="orange" style="--accent-color: #ff9900;">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h3><span class="swatch"></span>Naranja</h3>
+            <span>⭐ 4.0</span>
+        </div>
+        <p style="color: var(--texto-secundario);">El clásico: dulce y con un toque cítrico. Ideal bien fría.</p>
+        <small style="color: var(--acento);">#Clasico #Dulce</small>
+      </div>
+    </article>
+
+    <article class="card fanta-card" data-color="purple" style="--accent-color: #a25eff;">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h3><span class="swatch"></span>Uva</h3>
+            <span>⭐ 4.1</span>
+        </div>
+        <p style="color: var(--texto-secundario);">Sabor intenso y jugoso. Para quien busca algo fuerte.</p>
+        <small style="color: var(--acento);">#Intenso #Frutal</small>
+      </div>
+    </article>
+
+    <article class="card fanta-card" data-color="yellow" style="--accent-color: #ffd60a;">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h3><span class="swatch"></span>Piña</h3>
+            <span>⭐ 3.9</span>
+        </div>
+        <p style="color: var(--texto-secundario);">Dulce tropical con sensación refrescante. Mejor con hielo.</p>
+        <small style="color: var(--acento);">#Tropical #Verano</small>
+      </div>
+    </article>
+
+    <article class="card fanta-card" data-color="red" style="--accent-color: #ff3e5b;">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h3><span class="swatch"></span>Fresa</h3>
+            <span>⭐ 3.5</span>
+        </div>
+        <p style="color: var(--texto-secundario);">Sabor tipo caramelo. Muy dulce, para golosos.</p>
+        <small style="color: var(--acento);">#Caramelo #Dulce</small>
+      </div>
+    </article>
+
+    <article class="card fanta-card" data-color="green" style="--accent-color: #36d67b;">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h3><span class="swatch"></span>Manzana</h3>
+            <span>⭐ 4.0</span>
+        </div>
+        <p style="color: var(--texto-secundario);">Toque ácido que equilibra el dulzor. Muy refrescante.</p>
+        <small style="color: var(--acento);">#Acido #Ligero</small>
+      </div>
+    </article>
+
+  </section>
+</main>
+
+<footer>
+  <p>© 2026 - Guía de Sabores Fanta</p>
+</footer>
+
+<script>
+  /* Mismo script de filtro, simplificado */
+  const q = document.getElementById('q');
+  const chips = Array.from(document.querySelectorAll('.chip'));
+  const cards = Array.from(document.querySelectorAll('.fanta-card'));
+
+  let activeFilter = 'all';
+
+  function applyFilters() {
+    const term = (q.value || '').trim().toLowerCase();
+    cards.forEach(card => {
+      const color = card.dataset.color;
+      const text = card.innerText.toLowerCase();
+      const matchFilter = (activeFilter === 'all') || (color === activeFilter);
+      const matchSearch = !term || text.includes(term);
+      card.classList.toggle('hidden', !(matchFilter && matchSearch));
+    });
+  }
+
+  chips.forEach(btn => {
+    btn.addEventListener('click', () => {
+      chips.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeFilter = btn.dataset.filter;
+      applyFilters();
+    });
+  });
+
+  q.addEventListener('input', applyFilters);
+</script>
+
+</body>
+</html>
